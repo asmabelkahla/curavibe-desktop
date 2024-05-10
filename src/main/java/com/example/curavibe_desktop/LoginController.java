@@ -1,55 +1,46 @@
 package com.example.curavibe_desktop;
 
-
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.event.ActionEvent;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.sql.*;
+import java.util.ResourceBundle;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import javafx.event.ActionEvent;
-import com.example.curavibe_desktop.Connexion;
-
-import java.io.IOException;
-import java.sql.*;
-import java.util.ResourceBundle;
-import java.net.URL;
-import java.io.File;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 
 public class LoginController implements Initializable {
 
-
     @FXML
     private ImageView brandingImageView;
+
+    @FXML
+    private ImageView mail;
+
     @FXML
     private Label loginMessageLabel;
 
     @FXML
+    private ImageView MP;
 
+    @FXML
     private TextField Email;
+
     @FXML
     private PasswordField password;
-    PreparedStatement st = null;
-    Connection con = Connexion.getInstance().getCnx();
-    ResultSet rs = null;
 
-    private Stage stage;
-    @FXML
-    private Scene scene;
-    @FXML
-    private Parent root;
-
-
-
-    @FXML
-    private Button cancelbutton;
+    private Connection con;
+    private SceneManager sceneManager;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -57,13 +48,18 @@ public class LoginController implements Initializable {
         Image brandingImage = new Image(brandingFile.toURI().toString());
         brandingImageView.setImage(brandingImage);
 
+        File MailFile = new File("img/mail.png");
+        Image MailImage = new Image(MailFile.toURI().toString());
+        mail.setImage(MailImage);
 
+        File MPFile = new File("img/padlock.png");
+        Image MPImage = new Image(MPFile.toURI().toString());
+        MP.setImage(MPImage);
     }
 
-
-
-    public void loginButtonOnAction(ActionEvent event) throws SQLException {
-        String email = Email.getText().trim(); // Supprimer les espaces avant et après
+    @FXML
+    private void loginButtonOnAction(ActionEvent event) throws SQLException, IOException {
+        String email = Email.getText().trim();
         String pass = password.getText();
 
         if (email.isEmpty() || pass.isEmpty()) {
@@ -71,12 +67,28 @@ public class LoginController implements Initializable {
         } else if (!isValidEmail(email)) {
             loginMessageLabel.setText("Format d'e-mail invalide");
         } else {
-            // Procéder à la requête de la base de données
-            st = con.prepareStatement("SELECT * FROM users WHERE email = ?");
+            PreparedStatement st = null;
+            ResultSet rs = null;
+            con = Connexion.getInstance().getCnx();
+            st = con.prepareStatement("SELECT * FROM users WHERE email = ? AND password = ?");
             st.setString(1, email);
+            st.setString(2, pass);
             rs = st.executeQuery();
             if (rs.next()) {
-                System.out.println("Valide"); // Ajoutez votre code ici pour la vérification réussie du mot de passe
+                String userType = rs.getString("type_compte");
+                if ("admin".equals(userType)) {
+                    Parent root = FXMLLoader.load(getClass().getResource("DashbordeStat.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.show();
+                } else {
+                    Parent root = FXMLLoader.load(getClass().getResource("Profil.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.show();
+                }
             } else {
                 loginMessageLabel.setText("E-mail ou mot de passe incorrect");
             }
@@ -84,23 +96,38 @@ public class LoginController implements Initializable {
     }
 
     private boolean isValidEmail(String email) {
-        // Validation simple de l'e-mail en utilisant une expression régulière
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        return email.matches(emailRegex);
+        return email.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
     }
 
-
-    public void goToSignUp(ActionEvent event) throws IOException{
-        root = FXMLLoader.load(getClass().getResource("Register.fxml"));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
+    @FXML
+    private void goToSignUp() throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("Register.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) brandingImageView.getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
-    public void cancelbuttonOnAction (ActionEvent event){
-        Stage stage = (Stage) cancelbutton.getScene().getWindow();
-        stage.close();
 
+    @FXML
+    private void PasswordN() throws IOException {
+
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("ResettPassword.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) brandingImageView.getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle the error appropriately, e.g., show an error message to the user
+        }
+    }
+    private String userEmail;
+    public void initData(String userEmail) {
+        this.userEmail = userEmail;
     }
 
+    public void setSceneManager(SceneManager sceneManager) {
+        this.sceneManager = sceneManager;
+    }
 }
