@@ -45,6 +45,10 @@ public class RegisterController implements Initializable {
 
     @FXML
     private ImageView brandingImageView2;
+    @FXML
+    private ImageView mail;
+    @FXML
+    private ImageView phone;
 
     private Stage stage;
     @FXML
@@ -71,6 +75,8 @@ public class RegisterController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         con = Connexion.getInstance().getCnx();
         loadImage("logo.png", brandingImageView2);
+        loadImage("mail.png", mail);
+        loadImage("viber.png", phone);
     }
     private void loadImage(String fileName, ImageView imageView) {
         File imageFile = new File(IMAGE_PATH + fileName);

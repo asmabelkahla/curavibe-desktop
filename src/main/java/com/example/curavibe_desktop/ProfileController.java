@@ -3,22 +3,28 @@ package com.example.curavibe_desktop;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ResourceBundle;
 
-public class ProfileController {
+public class ProfileController implements Initializable {
 
     @FXML
     private Label nameLabel;
@@ -37,6 +43,8 @@ public class ProfileController {
 
     @FXML
     private TextField addressTextField;
+    @FXML
+    private ImageView profil;
 
     @FXML
     private TextField phoneTextField;
@@ -47,6 +55,13 @@ public class ProfileController {
 
     public ProfileController() {
         connection = Connexion.getInstance().getCnx();
+    }
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        File profilFile = new File("img/téléchargement.png");
+        Image profilImage = new Image(profilFile.toURI().toString());
+        profil.setImage(profilImage);
     }
 
     private String emailUtilisateur = "wafabenfatma@gmail.com"; // Replace this with the authenticated user's email

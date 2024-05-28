@@ -55,6 +55,9 @@ public class LoginController implements Initializable {
         File MPFile = new File("img/padlock.png");
         Image MPImage = new Image(MPFile.toURI().toString());
         MP.setImage(MPImage);
+
+
+
     }
 
     @FXML

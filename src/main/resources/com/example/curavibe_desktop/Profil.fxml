@@ -9,12 +9,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.curavibe_desktop.ProfileController">
@@ -55,7 +56,11 @@
                                         <Insets left="20.0" top="30.0" />
                                     </VBox.margin>
                                 </HBox>
-                                <Circle fx:id="profilePicture" fill="DODGERBLUE" radius="100.0" stroke="BLACK" strokeType="INSIDE" />
+                        <ImageView fx:id="profil" fitHeight="225.0" fitWidth="239.0" pickOnBounds="true" preserveRatio="true" styleClass="free-delivery-card">
+                           <image>
+                              <Image url="@../../../../../../img/téléchargement.png" />
+                           </image>
+                        </ImageView>
                                 <HBox alignment="CENTER" prefHeight="53.0" prefWidth="335.0">
                                     <children>
                                         <Label prefHeight="53.0" prefWidth="167.0" text="Nom" textFill="WHITE">
@@ -186,7 +191,7 @@
                                                 <Pane prefHeight="125.0" prefWidth="578.0">
                                                     <children>
                                                         <DatePicker fx:id="dobDatePicker" layoutX="328.0" layoutY="101.0" prefHeight="40.0" prefWidth="200.0" />
-                                                        <Label layoutX="33.0" layoutY="73.0" prefHeight="24.0" prefWidth="156.0" text="Télephone">
+                                                        <Label layoutX="33.0" layoutY="101.0" prefHeight="24.0" prefWidth="156.0" text="Télephone">
                                                             <font>
                                                                 <Font name="Cambria" size="20.0" />
                                                             </font>
@@ -202,14 +207,6 @@
                                                 </Pane>
                                             </children>
                                         </HBox>
-                                        <JFXButton style="-fx-background-color: #37517e;" styleClass="shopping-online-card" stylesheets="@../../../style/style.css" text="Actualiser le profil">
-                                            <font>
-                                                <Font name="Cambria" size="14.0" />
-                                            </font>
-                                            <VBox.margin>
-                                                <Insets left="50.0" />
-                                            </VBox.margin>
-                                        </JFXButton>
                                     </children>
                                 </VBox>
                             </children>
